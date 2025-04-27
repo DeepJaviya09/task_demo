@@ -12,7 +12,7 @@ A Laravel-based REST API with JWT authentication and MySQL database.
 
 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/task_demo.git
+git clone https://github.com/DeepJaviya09/task_demo.git
 cd task_demo
 ```
 
