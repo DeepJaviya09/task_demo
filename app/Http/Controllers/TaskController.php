@@ -12,9 +12,34 @@ class TaskController extends Controller
 {
     public function index(Request $request)
     {
-        $tasks = Task::paginate(10);
-        return response()->json($tasks);
+        $query = Task::query();
+    
+        if ($request->has('status')) {
+            $query->where('status', $request->input('status'));
+        }
+        
+        if ($request->has('priority')) {
+            $query->where('priority', $request->input('priority'));
+        }
+    
+        $page = $request->input('page', 1); // Default page 1
+        $perPage = $request->input('per_page', 10); // Default 10 items per page
+    
+        $total = $query->count(); // Get total items after filtering
+        $tasks = $query
+            ->offset(($page - 1) * $perPage)
+            ->limit($perPage)
+            ->get();
+    
+        return response()->json([
+            'data' => $tasks,
+            'current_page' => (int) $page,
+            'per_page' => (int) $perPage,
+            'total' => $total,
+            'last_page' => ceil($total / $perPage),
+        ]);
     }
+    
 
     public function store(StoreTaskRequest $request)
     {
